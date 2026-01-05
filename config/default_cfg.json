@@ -1,0 +1,14 @@
+{
+  "last_used_file": "default_config.json",
+  "devices": [
+    {
+      "name": "Main Xbox Controller",
+      "id": "045e:02ea",
+      "serial": "000000000001",
+      "topic": "/joy/primary",
+      "enabled": true,
+      "deadzone": 0.05,
+      "refresh_rate": 50
+    }
+  ]
+}
