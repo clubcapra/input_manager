@@ -1,8 +1,8 @@
 {
   "devices": [
     {
-      "name": "Main_Controller",
-      "id": "045e:02ea",
+      "name": "*8bitDO",
+      "id": "045e:028e",
       "topic": "/robot/joy_main",
       "enabled": true,
       "deadzone": 0.05,

@@ -18,7 +18,7 @@ class InputManagerNode(Node):
                 pub = self.create_publisher(Joy, dev_cfg['topic'], 10)
                 
                 # Create and start the worker thread
-                worker = DeviceWorker(dev_cfg, pub)
+                worker = DeviceWorker(dev_cfg, pub, self) # Pass 'self' as the 3rd argument
                 worker.start()
                 self.workers[dev_cfg['name']] = worker
                 self.get_logger().info(f"Started worker for {dev_cfg['name']} on {dev_cfg['topic']}")
