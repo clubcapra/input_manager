@@ -1,1 +1,0 @@
-Here you shall dump your configs, they will be gitignored.

@@ -1,0 +1,40 @@
+# READONLY EXAMPLE! Do NOT modify this file for use or use it at runtime.
+# Here is an example of a list containing the setup of a single device
+# The program will automatically publish only the axises set in the config
+# And will publish all 0s for unspecified ones
+# Therefore, if an device does not possess an input, simply delete the line from the axis
+
+devices:
+  - name: "XBOX Controller" # Display name of the input device
+    id: "xxxx:xxxx" # USB Vendor ID and Product ID
+    alias: "main_xbox" # Alias used in topic names (/joy_inputs/alias & /input_watchdog/alias)
+    enabled: true # Wether the device is currently being listened and published
+    sanitize: false # Wether the axises are sanitized clientside using the deadzone
+    deadzone: 0 # Deadzone of the axises
+    mapping: # Evdev mappings (array position in joy_msg: evdev ID)
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Menu
+        8: 316 # Home
+        9: 317 # Special
+        10: 318 # LSB (Left Stick Button)
+        11: 319 # RSB (Right Stick Button)
+        12: 336 # LB4
+        13: 337 # LB5
+        14: 338 # RB4
+        15: 339 # RB5
+      axes:
+        0: 0 # LSX (Left Stick X-axis)
+        1: 1 # LSY (Left Stick Y-axis)
+        2: 2 # LT
+        3: 3 # RSX (Right Stick X-axis)
+        4: 4 # RSY (Right Stick Y-axis)
+        5: 5 # RT
+        6: 16 # D-PAD X
+        7: 17 # D-PAD Y
