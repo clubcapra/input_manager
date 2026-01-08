@@ -2,7 +2,7 @@
 # YH 2025-01-08
 
 devices:
-  - name: "XBOX Controller"
+  - name: "XBOX Controller labelled oufehiurhfiregiur"
     id: "xxxx:xxxx"
     alias: "main_xbox"
     enabled: true

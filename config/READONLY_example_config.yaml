@@ -5,9 +5,9 @@
 # Therefore, if an device does not possess an input, simply delete the line from the axis
 
 devices:
-  - name: "XBOX Controller" # Display name of the input device
+  - name: "Generic Controller" # Display name of the input device
     id: "xxxx:xxxx" # USB Vendor ID and Product ID
-    alias: "main_xbox" # Alias used in topic names (/joy_inputs/alias & /input_watchdog/alias)
+    alias: "main_controller" # Alias used in topic names (/joy_input/alias & /input_watchdog/alias)
     enabled: true # Wether the device is currently being listened and published
     sanitize: false # Wether the axises are sanitized clientside using the deadzone
     deadzone: 0 # Deadzone of the axises
