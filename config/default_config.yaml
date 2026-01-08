@@ -1,16 +1,14 @@
-# Here is an example of a list containing the setup of a single device
-# The program will automatically publish only the axises set in the config
-# And will publish all 0s for unspecified ones
-# Therefore, if an device does not possess an input, simply delete the line from the axis
+# Default config, containing CAPRA's main XBOX controller (labelled )
+# YH 2025-01-08
 
 devices:
-  - name: "XBOX Controller" # Display name of the input device
-    id: "xxxx:xxxx" # USB Vendor ID and Product ID
-    alias: "main_xbox" # Alias used in topic names (/joy_inputs/alias & /input_watchdog/alias)
-    enabled: true # Wether the device is currently being listened and published
-    sanitize: false # Wether the axises are sanitized clientside using the deadzone
-    deadzone: 0 # Deadzone of the axises
-    mapping: # Evdev mappings (array position in joy_msg: evdev ID)
+  - name: "XBOX Controller"
+    id: "xxxx:xxxx"
+    alias: "main_xbox"
+    enabled: true
+    sanitize: false
+    deadzone: 0
+    mapping:
       buttons:
         0: 304 # A
         1: 305 # B
@@ -24,10 +22,6 @@ devices:
         9: 317 # Special
         10: 318 # LSB (Left Stick Button)
         11: 319 # RSB (Right Stick Button)
-        12: 336 # LB4
-        13: 337 # LB5
-        14: 338 # RB4
-        15: 339 # RB5
       axes:
         0: 0 # LSX (Left Stick X-axis)
         1: 1 # LSY (Left Stick Y-axis)
