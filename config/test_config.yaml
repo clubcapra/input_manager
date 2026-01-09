@@ -51,9 +51,14 @@ devices:
         10: 318 # LSB (Left Stick Button)
         11: 319 # RSB (Right Stick Button)
         12: 336 # LB4
-        13: 337 # LB5
-        14: 338 # RB4
+        13: 337 # RB4
+        14: 338 # LB5
         15: 339 # RB5
+        16: 000 # Steamdeck Left Trackpad Click
+        17: 000 # Steamdeck Right Trackpad Click
+        18: 000 # Steamdeck Left Trigger-As-Button
+        19: 000 # Steamdeck Right Trigger-As-Button
+        
       axes:
         0: 0 # LSX (Left Stick X-axis)
         1: 1 # LSY (Left Stick Y-axis)
@@ -63,3 +68,7 @@ devices:
         5: 5 # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
+        8: 00 # Left Trackpad X-axis
+        9: 00 # Left Trackpad Y-axis
+        10: 00 # Right Trackpad X-axis
+        11: 00 # Right Trackpad Y-axis

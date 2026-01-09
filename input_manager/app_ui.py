@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import yaml # Use PyYAML
+import yaml
 import os
 import time
 
@@ -12,13 +12,23 @@ class InputManagerUI:
         self.root.title("Rescue Robot Input Manager")
         self.config_data = {"devices": []}
         
+        # --- UI Header: Current Config Display ---
+        self.header_frame = tk.Frame(self.root, bg="#eee", relief=tk.RIDGE, bd=1)
+        self.header_frame.pack(fill='x', padx=10, pady=5)
+        
+        tk.Label(self.header_frame, text="Active Config:", font=("Arial", 10, "bold"), bg="#eee").pack(side='left', padx=5)
+        self.file_label = tk.Label(self.header_frame, text="None", font=("Arial", 10), bg="#eee", fg="#333")
+        self.file_label.pack(side='left', padx=5)
+
+        # --- Buttons ---
         btn_frame = tk.Frame(self.root)
         btn_frame.pack(fill='x', padx=10, pady=5)
 
         tk.Button(btn_frame, text="Import (YAML)", command=self.import_config).pack(side='left', expand=True, fill='x')
         tk.Button(btn_frame, text="Save Config", command=self.save_config).pack(side='left', expand=True, fill='x')
         
-        self.device_listbox = tk.Listbox(self.root, font=("Courier", 10))
+        # --- Listbox ---
+        self.device_listbox = tk.Listbox(self.root, font=("Courier", 10), selectmode=tk.SINGLE)
         self.device_listbox.pack(fill='both', expand=True, padx=10, pady=5)
 
         tk.Button(self.root, text="Enable / Disable Selected", command=self.toggle_device, bg="#ddd").pack(fill='x', padx=10, pady=10)
@@ -29,12 +39,20 @@ class InputManagerUI:
         if os.path.exists(path):
             try:
                 with open(path, 'r') as f:
-                    self.config_data = yaml.safe_load(f) # YAML Loading
+                    self.config_data = yaml.safe_load(f)
+                
+                # Update the display label with just the filename for readability
+                filename = os.path.basename(path)
+                self.file_label.config(text=filename)
+                
                 self.update_ui_list()
                 self.node.start_devices(self.config_data)
-                if self.on_config_loaded: self.on_config_loaded(path)
+                
+                if self.on_config_loaded: 
+                    self.on_config_loaded(path)
             except Exception as e:
                 messagebox.showerror("YAML Error", f"Failed to parse config: {e}")
+                self.file_label.config(text="ERROR LOADING FILE", fg="red")
 
     def update_ui_list(self):
         self.device_listbox.delete(0, tk.END)
@@ -77,6 +95,7 @@ class InputManagerUI:
         if path:
             with open(path, 'w') as f:
                 yaml.dump(self.config_data, f, default_flow_style=False)
+            self.file_label.config(text=os.path.basename(path))
 
     def run(self):
         while True:
