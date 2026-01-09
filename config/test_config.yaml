@@ -31,7 +31,7 @@ devices:
         7: 17 # D-PAD Y
 
   - name: "Steam Deck"
-    id: "xxxx:xxxx"
+    id: "0000:0000"
     alias: "steamdeck"
     enabled: false
     sanitize: true
