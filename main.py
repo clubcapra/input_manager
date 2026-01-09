@@ -32,20 +32,15 @@ def save_last_config_path(path):
 
 def main():
     rclpy.init()
-    
-    # Initialize the ROS2 Node
     node = InputManagerNode()
-    
-    # 1. Determine which config to load
     initial_path = get_last_config_path()
 
-    # 2. Start ROS2 spinning in a background thread
-    # This allows the UI to stay responsive while ROS handles communication
     ros_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     ros_thread.start()
 
-    # 3. Launch the UI
-    # We pass the node, the initial path, and the persistence callback
+    # Startup Log
+    node.get_logger().info("Input Manager Service Started.")
+
     ui = InputManagerUI(node, initial_path, on_config_loaded=save_last_config_path)
     
     try:
@@ -53,7 +48,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        # Cleanup: Stop all worker threads and shutdown ROS2
+        node.get_logger().info("Shutting down Input Manager...")
         node.stop_all_devices()
         if rclpy.ok():
             rclpy.shutdown()

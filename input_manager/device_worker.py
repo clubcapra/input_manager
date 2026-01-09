@@ -67,19 +67,22 @@ class DeviceWorker(threading.Thread):
     def run(self):
         last_joy_time = 0
         last_wd_time = 0
+        previously_connected = False
 
         while self.running:
             current_time = time.time()
 
-            # 1. Hardware Connection Management
             if not self.is_connected or self.device is None:
                 self.device = self._find_device()
                 if self.device:
                     self.is_connected = True
+                    previously_connected = True
                     self.node.get_logger().info(f"[{self.config['name']}] Connected.")
                 else:
+                    if previously_connected:
+                        self.node.get_logger().warn(f"[{self.config['name']}] Connection Lost.")
+                        previously_connected = False
                     self.is_connected = False
-                    # Force zeros if disconnected
                     self.joy_msg.axes = [0.0] * 8
                     self.joy_msg.buttons = [0] * 16
 

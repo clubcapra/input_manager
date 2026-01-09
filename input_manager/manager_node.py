@@ -13,9 +13,10 @@ class InputManagerNode(Node):
                 worker = DeviceWorker(dev_cfg, self)
                 worker.start()
                 self.workers[dev_cfg['name']] = worker
-                self.get_logger().info(f"Launched worker: {dev_cfg['name']} (Alias: {dev_cfg['alias']})")
+                self.get_logger().info(f"Enabled device: {dev_cfg['name']}")
 
     def stop_all_devices(self):
         for name, worker in self.workers.items():
             worker.stop()
+            self.get_logger().info(f"Disabled device: {name}")
         self.workers.clear()
