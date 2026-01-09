@@ -4,7 +4,7 @@
 devices:
   - name: "XBOX Controller \"CAPRUH\""
     id: "045e:0b12"
-    alias: "main_xbox"
+    alias: "xbox_controller_laptop"
     enabled: true
     sanitize: false
     deadzone: 0
