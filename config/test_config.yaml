@@ -5,8 +5,8 @@ devices:
     id: "045e:028e"
     alias: "msi_controller_laptop"
     enabled: true
-    sanitize: false
-    deadzone: 0
+    sanitize: true
+    deadzone: 0.01
     mapping:
       buttons:
         0: 304 # A
