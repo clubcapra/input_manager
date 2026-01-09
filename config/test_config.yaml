@@ -1,0 +1,74 @@
+#Added for the purpose of tests during dev, this can be destroyed as its meant to be branch specific
+
+devices:
+  - name: "MSI Wireless Controller"
+    id: "045e:028e"
+    alias: "msi_controller_laptop"
+    enabled: true
+    sanitize: false
+    deadzone: 0
+    mapping:
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Menu
+        8: 316 # Home
+        10: 317 # LSB (Left Stick Button)
+        11: 318 # RSB (Right Stick Button)
+      axes:
+        0: 0 # LSX (Left Stick X-axis)
+        1: 1 # LSY (Left Stick Y-axis)
+        2: 2 # LT
+        3: 3 # RSX (Right Stick X-axis)
+        4: 4 # RSY (Right Stick Y-axis)
+        5: 5 # RT
+        6: 16 # D-PAD X
+        7: 17 # D-PAD Y
+
+  - name: "Steam Deck"
+    id: "0000:0000"
+    alias: "steamdeck"
+    enabled: false
+    sanitize: true
+    deadzone: 0.01
+    mapping:
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Menu
+        8: 316 # Home
+        9: 317 # Special
+        10: 318 # LSB (Left Stick Button)
+        11: 319 # RSB (Right Stick Button)
+        12: 336 # LB4
+        13: 337 # RB4
+        14: 338 # LB5
+        15: 339 # RB5
+        16: 000 # Steamdeck Left Trackpad Click
+        17: 000 # Steamdeck Right Trackpad Click
+        18: 000 # Steamdeck Left Trigger-As-Button
+        19: 000 # Steamdeck Right Trigger-As-Button
+        
+      axes:
+        0: 0 # LSX (Left Stick X-axis)
+        1: 1 # LSY (Left Stick Y-axis)
+        2: 2 # LT
+        3: 3 # RSX (Right Stick X-axis)
+        4: 4 # RSY (Right Stick Y-axis)
+        5: 5 # RT
+        6: 16 # D-PAD X
+        7: 17 # D-PAD Y
+        8: 00 # Left Trackpad X-axis
+        9: 00 # Left Trackpad Y-axis
+        10: 00 # Right Trackpad X-axis
+        11: 00 # Right Trackpad Y-axis

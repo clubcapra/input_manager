@@ -1,4 +1,3 @@
-import rclpy
 from rclpy.node import Node
 from .device_worker import DeviceWorker
 
@@ -9,14 +8,15 @@ class InputManagerNode(Node):
 
     def start_devices(self, config_data):
         self.stop_all_devices()
-        for dev_cfg in config_data['devices']:
-            if dev_cfg['enabled']:
-                pub = self.create_publisher(Joy, dev_cfg['topic'], 10)
-                worker = DeviceWorker(dev_cfg, pub)
+        for dev_cfg in config_data.get('devices', []):
+            if dev_cfg.get('enabled', False):
+                worker = DeviceWorker(dev_cfg, self)
                 worker.start()
                 self.workers[dev_cfg['name']] = worker
+                self.get_logger().info(f"Enabled device: {dev_cfg['name']}")
 
     def stop_all_devices(self):
-        for worker in self.workers.values():
+        for name, worker in self.workers.items():
             worker.stop()
+            self.get_logger().info(f"Disabled device: {name}")
         self.workers.clear()

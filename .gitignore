@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Configs
+/config/*.yaml
+!/config/
+!/config/readme.md
+!/config/READONLY_example_config.yaml
+!/config/default_config.yaml
+!/config/test_config.yaml

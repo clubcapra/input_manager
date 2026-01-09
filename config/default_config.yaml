@@ -1,0 +1,33 @@
+# Default config, containing CAPRA's main XBOX controller (labelled )
+# YH 2025-01-08
+
+devices:
+  - name: "XBOX Controller \"CAPRUH\""
+    id: "045e:0b12"
+    alias: "xbox_controller_laptop"
+    enabled: true
+    sanitize: false
+    deadzone: 0
+    mapping:
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Menu
+        8: 316 # Home
+        9: 167 # Special
+        10: 317 # LSB (Left Stick Button)
+        11: 318 # RSB (Right Stick Button)
+      axes:
+        0: 0 # LSX (Left Stick X-axis)
+        1: 1 # LSY (Left Stick Y-axis)
+        2: 2 # LT
+        3: 3 # RSX (Right Stick X-axis)
+        4: 4 # RSY (Right Stick Y-axis)
+        5: 5 # RT
+        6: 16 # D-PAD X
+        7: 17 # D-PAD Y

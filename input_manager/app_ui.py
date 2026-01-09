@@ -1,60 +1,106 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import json
+import yaml
 import os
+import time
 
 class InputManagerUI:
-    def __init__(self, ros_node):
+    def __init__(self, ros_node, initial_path, on_config_loaded=None):
         self.node = ros_node
+        self.on_config_loaded = on_config_loaded
         self.root = tk.Tk()
-        self.root.title("ROS2 Input Manager")
-        self.config_path = "config/default_config.json"
+        self.root.title("Rescue Robot Input Manager")
+        self.config_data = {"devices": []}
         
-        # UI Elements
-        self.status_label = tk.Label(self.root, text="Status: Ready", fg="green")
-        self.status_label.pack(pady=5)
+        # --- UI Header: Current Config Display ---
+        self.header_frame = tk.Frame(self.root, bg="#eee", relief=tk.RIDGE, bd=1)
+        self.header_frame.pack(fill='x', padx=10, pady=5)
+        
+        tk.Label(self.header_frame, text="Active Config:", font=("Arial", 10, "bold"), bg="#eee").pack(side='left', padx=5)
+        self.file_label = tk.Label(self.header_frame, text="None", font=("Arial", 10), bg="#eee", fg="#333")
+        self.file_label.pack(side='left', padx=5)
 
-        self.btn_import = tk.Button(self.root, text="Import Config", command=self.import_config)
-        self.btn_import.pack(fill='x', padx=10)
+        # --- Buttons ---
+        btn_frame = tk.Frame(self.root)
+        btn_frame.pack(fill='x', padx=10, pady=5)
 
-        self.btn_save = tk.Button(self.root, text="Save/Export Config", command=self.export_config)
-        self.btn_save.pack(fill='x', padx=10)
+        tk.Button(btn_frame, text="Import (YAML)", command=self.import_config).pack(side='left', expand=True, fill='x')
+        tk.Button(btn_frame, text="Save Config", command=self.save_config).pack(side='left', expand=True, fill='x')
+        
+        # --- Listbox ---
+        self.device_listbox = tk.Listbox(self.root, font=("Courier", 10), selectmode=tk.SINGLE)
+        self.device_listbox.pack(fill='both', expand=True, padx=10, pady=5)
 
-        self.device_listbox = tk.Listbox(self.root)
-        self.device_listbox.pack(fill='both', expand=True, padx=10, pady=10)
+        tk.Button(self.root, text="Enable / Disable Selected", command=self.toggle_device, bg="#ddd").pack(fill='x', padx=10, pady=10)
 
-        self.load_initial_config()
+        self._load_config(initial_path)
 
-    def load_initial_config(self):
-        if os.path.exists(self.config_path):
-            with open(self.config_path, 'r') as f:
-                data = json.load(f)
-                self.update_ui_list(data)
-                self.node.start_devices(data)
+    def _load_config(self, path):
+        if os.path.exists(path):
+            try:
+                with open(path, 'r') as f:
+                    self.config_data = yaml.safe_load(f)
+                
+                # Update the display label with just the filename for readability
+                filename = os.path.basename(path)
+                self.file_label.config(text=filename)
+                
+                self.update_ui_list()
+                self.node.start_devices(self.config_data)
+                
+                if self.on_config_loaded: 
+                    self.on_config_loaded(path)
+            except Exception as e:
+                messagebox.showerror("YAML Error", f"Failed to parse config: {e}")
+                self.file_label.config(text="ERROR LOADING FILE", fg="red")
+
+    def update_ui_list(self):
+        self.device_listbox.delete(0, tk.END)
+        for d in self.config_data.get('devices', []):
+            self.device_listbox.insert(tk.END, d['name'])
+
+    def toggle_device(self):
+        selection = self.device_listbox.curselection()
+        if not selection: return
+        idx = selection[0]
+        device = self.config_data['devices'][idx]
+        device['enabled'] = not device.get('enabled', True)
+        self.node.start_devices(self.config_data)
+
+    def update_ui_status(self):
+        for i, dev in enumerate(self.config_data.get('devices', [])):
+            name = dev['name']
+            enabled = dev.get('enabled', True)
+            worker = self.node.workers.get(name)
+            is_alive = worker and worker.is_connected
+            
+            status = "[OK]" if is_alive else "[LOST]"
+            if not enabled: status = "[DISABLED]"
+            
+            color = "black" if (is_alive and enabled) else "red"
+            if not enabled: color = "gray"
+
+            text = f"{status} {name} -> /joy_input/{dev['alias']}"
+            if self.device_listbox.get(i) != text:
+                self.device_listbox.delete(i)
+                self.device_listbox.insert(i, text)
+            self.device_listbox.itemconfig(i, fg=color)
 
     def import_config(self):
-        path = filedialog.askopenfilename(filetypes=[("JSON Files", "*.json")])
+        path = filedialog.askopenfilename(filetypes=[("YAML Files", "*.yaml"), ("All", "*.*")])
+        if path: self._load_config(path)
+
+    def save_config(self):
+        path = filedialog.asksaveasfilename(defaultextension=".yaml")
         if path:
-            with open(path, 'r') as f:
-                data = json.load(f)
-                self.config_path = path
-                self.update_ui_list(data)
-                self.node.start_devices(data)
-                messagebox.showinfo("Success", "Config Loaded")
-
-    def export_config(self):
-        # Implementation for saving current UI state back to JSON
-        pass
-
-    def update_ui_list(self, data):
-        self.device_listbox.delete(0, tk.END)
-        for d in data['devices']:
-            status = "[ON]" if d['enabled'] else "[OFF]"
-            self.device_listbox.insert(tk.END, f"{status} {d['name']} -> {d['topic']}")
+            with open(path, 'w') as f:
+                yaml.dump(self.config_data, f, default_flow_style=False)
+            self.file_label.config(text=os.path.basename(path))
 
     def run(self):
-        # Custom loop to handle Tkinter and ROS2
         while True:
-            self.root.update_idletasks()
-            self.root.update()
-            # In a real app, you'd call rclpy.spin_once() here
+            try:
+                self.update_ui_status()
+                self.root.update()
+                time.sleep(0.1)
+            except: break
