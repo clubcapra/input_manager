@@ -2,8 +2,8 @@
 # YH 2025-01-08
 
 devices:
-  - name: "XBOX Controller labelled oufehiurhfiregiur"
-    id: "xxxx:xxxx"
+  - name: "XBOX Controller \"CAPRUH\""
+    id: "045e:0b12"
     alias: "main_xbox"
     enabled: true
     sanitize: false
@@ -19,9 +19,9 @@ devices:
         6: 314 # Select
         7: 315 # Menu
         8: 316 # Home
-        9: 317 # Special
-        10: 318 # LSB (Left Stick Button)
-        11: 319 # RSB (Right Stick Button)
+        9: 167 # Special
+        10: 317 # LSB (Left Stick Button)
+        11: 318 # RSB (Right Stick Button)
       axes:
         0: 0 # LSX (Left Stick X-axis)
         1: 1 # LSY (Left Stick Y-axis)
