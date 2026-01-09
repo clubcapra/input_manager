@@ -212,3 +212,4 @@ __marimo__/
 !/config/readme.md
 !/config/READONLY_example_config.yaml
 !/config/default_config.yaml
+!/config/test_config.yaml
