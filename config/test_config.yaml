@@ -34,8 +34,8 @@ devices:
     id: "xxxx:xxxx"
     alias: "steamdeck"
     enabled: false
-    sanitize: false
-    deadzone: 0
+    sanitize: true
+    deadzone: 0.01
     mapping:
       buttons:
         0: 304 # A

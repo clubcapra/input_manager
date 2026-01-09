@@ -42,15 +42,27 @@ class DeviceWorker(threading.Thread):
         return None
 
     def process_event(self, event):
-        if event.type == 3:  # EV_ABS
-            if event.code in self.axis_map:
-                idx = self.axis_map[event.code]
-                # Standard 16-bit normalization
-                self.joy_msg.axes[idx] = float(event.value) / 32767.0
-        elif event.type == 1:  # EV_KEY
-            if event.code in self.btn_map:
-                idx = self.btn_map[event.code]
-                self.joy_msg.buttons[idx] = 1 if event.value > 0 else 0
+            # 3 = EV_ABS (Axes)
+            if event.type == 3:
+                if event.code in self.axis_map:
+                    idx = self.axis_map[event.code]
+                    
+                    # 1. Normalize hardware value (-32767 to 32767) to (-1.0 to 1.0)
+                    val = float(event.value) / 32767.0
+                    
+                    # 2. Apply Sanitization/Deadzone
+                    if self.config.get('sanitize', False):
+                        deadzone = self.config.get('deadzone', 0.0)
+                        if abs(val) < deadzone:
+                            val = 0.0
+                    
+                    self.joy_msg.axes[idx] = val
+
+            # 1 = EV_KEY (Buttons)
+            elif event.type == 1:
+                if event.code in self.btn_map:
+                    idx = self.btn_map[event.code]
+                    self.joy_msg.buttons[idx] = 1 if event.value > 0 else 0
 
     def run(self):
         last_joy_time = 0
