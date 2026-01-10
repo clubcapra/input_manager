@@ -20,7 +20,7 @@ devices:
         4: 000 # LB
         5: 000 # RB
         6: 000 # Select
-        7: 000 # Menu
+        7: 000 # Start
         8: 000 # Home
         9: 000 # Special
         10: 000 # LSB (Left Stick Button)
@@ -29,10 +29,14 @@ devices:
         13: 000 # RB4
         14: 000 # LB5
         15: 000 # RB5
-        16: 000 # Steamdeck Left Trackpad Click
-        17: 000 # Steamdeck Right Trackpad Click
-        18: 000 # Steamdeck Left Trigger-As-Button
-        19: 000 # Steamdeck Right Trigger-As-Button
+        16: 000 # D-PAD UP [DPAD as Button]
+        17: 000 # D-PAD DOWN [DPAD as Button]
+        18: 000 # D-PAD LEFT [DPAD as Button]
+        19: 000 # D-PAD RIGHT [DPAD as Button]
+        20: 000 # Left Trackpad Click [STEAMDECK ONLY]
+        21: 000 # Right Trackpad Click [STEAMDECK ONLY]
+        22: 000 # Left Trigger-As-Button [STEAMDECK ONLY]
+        23: 000 # Right Trigger-As-Button [STEAMDECK ONLY]
         
       axes:
         0: 00 # LSX (Left Stick X-axis)
@@ -41,9 +45,9 @@ devices:
         3: 00 # RSX (Right Stick X-axis)
         4: 00 # RSY (Right Stick Y-axis)
         5: 00 # RT
-        6: 00 # D-PAD X
-        7: 00 # D-PAD Y
-        8: 00 # Left Trackpad X-axis
-        9: 00 # Left Trackpad Y-axis
-        10: 00 # Right Trackpad X-axis
-        11: 00 # Right Trackpad Y-axis
+        6: 00 # D-PAD X [DPAD as Axis]
+        7: 00 # D-PAD Y [DPAD as Axis]
+        8: 00 # Left Trackpad X-axis [STEAMDECK ONLY]
+        9: 00 # Left Trackpad Y-axis [STEAMDECK ONLY]
+        10: 00 # Right Trackpad X-axis [STEAMDECK ONLY]
+        11: 00 # Right Trackpad Y-axis [STEAMDECK ONLY]

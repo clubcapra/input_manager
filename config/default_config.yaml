@@ -17,7 +17,7 @@ devices:
         4: 310 # LB
         5: 311 # RB
         6: 314 # Select
-        7: 315 # Menu
+        7: 315 # Start
         8: 316 # Home
         9: 167 # Special
         10: 317 # LSB (Left Stick Button)
