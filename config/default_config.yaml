@@ -31,3 +31,77 @@ devices:
         5: 5 # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
+
+  - name: "MSI Wireless Controller"
+    id: "045e:028e"
+    alias: "msi_controller_laptop"
+    enabled: true
+    sanitize: false
+    deadzone: 0.01
+    mapping:
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Menu
+        8: 316 # Home
+        10: 317 # LSB (Left Stick Button)
+        11: 318 # RSB (Right Stick Button)
+      axes:
+        0: 0 # LSX (Left Stick X-axis)
+        1: 1 # LSY (Left Stick Y-axis)
+        2: 2 # LT
+        3: 3 # RSX (Right Stick X-axis)
+        4: 4 # RSY (Right Stick Y-axis)
+        5: 5 # RT
+        6: 16 # D-PAD X
+        7: 17 # D-PAD Y
+
+  - name: "Steam Deck"
+    id: "28de:1205"
+    alias: "steamdeck"
+    enabled: true
+    sanitize: true
+    deadzone: 0.05
+    mapping:
+      buttons:
+        0: 304 # A
+        1: 305 # B
+        2: 307 # X
+        3: 308 # Y
+        4: 310 # LB
+        5: 311 # RB
+        6: 314 # Select
+        7: 315 # Start
+        8: 316 # Home
+        9: 294 # Special
+        10: 317 # LSB
+        11: 318 # RSB
+        12: 704 # LB4
+        13: 705 # RB4
+        14: 706 # LB5
+        15: 707 # RB5
+        16: 544 # D-PAD UP
+        17: 545 # D-PAD DOWN
+        18: 546 # D-PAD LEFT
+        19: 547 # D-PAD RIGHT
+        20: 289 # Left Trackpad Click
+        21: 290 # Right Trackpad Click
+        22: 312 # Left Trigger-As-Button
+        23: 313 # Right Trigger-As-Button
+        
+      axes:
+        0: 0 # LSX
+        1: 1 # LSY
+        2: 21 # LT
+        3: 3 # RSX
+        4: 4 # RSY
+        5: 20 # RT
+        8: 16 # Left Trackpad X-axis
+        9: 17 # Left Trackpad Y-axis
+        10: 18 # Right Trackpad X-axis
+        11: 19 # Right Trackpad Y-axis

@@ -21,10 +21,10 @@ class DeviceWorker(threading.Thread):
         self.joy_pub = self.node.create_publisher(Joy, f'/joy_input/{alias}', 10)
         self.wd_pub = self.node.create_publisher(Bool, f'/input_watchdog/{alias}', 10)
 
-        # Initialize Joy message (8 axes, 16 buttons as per Steam Deck spec)
+        # Initialize Joy message (12 axises and 24 buttons tu support all possible inputs)
         self.joy_msg = Joy()
-        self.joy_msg.axes = [0.0] * 8
-        self.joy_msg.buttons = [0] * 16
+        self.joy_msg.axes = [0.0] * 12
+        self.joy_msg.buttons = [0] * 24
 
         # Mappings from YAML (keys are indices, values are evdev codes)
         # We invert them for faster lookup: evdev_code -> joy_index
