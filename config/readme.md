@@ -2,6 +2,6 @@ This directory is used for configs. They are unfortunately stored in YAML, which
 
 **READONLY_example_config.yaml shall NOT BE MODIFIED or used at runtime**. It is an example with comments explaining how a config file should be made to support a device.
 
-default_config.yaml is the default, basic config used by CAPRA at any point in time. It is not persistent and therefore should not be relied upon blindly.
+default_config.yaml is the default, basic config used by CAPRA at any point in time. It is not  persistent and therefore should not be relied upon blindly.
 
 other configs will be gitignored.
