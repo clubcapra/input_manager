@@ -5,3 +5,5 @@ This directory is used for configs. They are unfortunately stored in YAML, which
 default_config.yaml is the default, basic config used by CAPRA at any point in time. It is not persistent and therefore should not be relied upon blindly.
 
 other configs will be gitignored.
+
+pr test
