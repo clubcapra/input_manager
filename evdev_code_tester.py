@@ -12,17 +12,23 @@ def main():
         return
 
     print(f"--- Listening to {len(devices)} devices ---")
+    
+    # Map file descriptors to device objects and store their ID strings
+    dev_map = {}
     for d in devices:
-        print(f"Device: {d.name} | Path: {d.path} | ID: {d.info.vendor:04x}:{d.info.product:04x}")
+        # Create the xxxx:xxxx ID string once
+        hw_id = f"{d.info.vendor:04x}:{d.info.product:04x}"
+        dev_map[d.fd] = {
+            "device": d,
+            "hw_id": hw_id
+        }
+        print(f"Device: {d.name:20} | ID: {hw_id} | Path: {d.path}")
     
     print("\nPress buttons or move sticks. (Ctrl+C to exit)")
-    print("-" * 50)
+    print("-" * 80)
 
-    # Dictionary to track unique codes per device to prevent spam
+    # Dictionary to track unique codes per device ID + event type + code
     seen_inputs = set()
-    
-    # Map file descriptors to device objects
-    dev_map = {d.fd: d for d in devices}
 
     try:
         while True:
@@ -30,18 +36,20 @@ def main():
             r, w, x = select.select(dev_map.keys(), [], [])
             
             for fd in r:
-                for event in dev_map[fd].read():
-                    # type 1 = BTN, type 3 = ABS (Axes)
+                current_dev = dev_map[fd]["device"]
+                hw_id = dev_map[fd]["hw_id"]
+                
+                for event in current_dev.read():
+                    # type 1 = BTN (EV_KEY), type 3 = ABS (EV_ABS/Axes)
                     if event.type in [1, 3]:
-                        dev_name = dev_map[fd].name
-                        # Create a unique key for this specific input on this device
-                        unique_id = f"{dev_name}_{event.type}_{event.code}"
+                        # Create a unique key including the hardware ID
+                        unique_id = f"{hw_id}_{event.type}_{event.code}"
                         
                         if unique_id not in seen_inputs:
                             seen_inputs.add(unique_id)
                             
                             label = "BUTTON" if event.type == 1 else "AXIS"
-                            print(f"[NEW] {dev_name:20} | {label:6} | Code: {event.code:3} | Raw Val: {event.value}")
+                            print(f"[NEW] ID: {hw_id} | {label:6} | Code: {event.code:4} | Device: {current_dev.name}")
 
     except KeyboardInterrupt:
         print("\nExiting mapper.")
