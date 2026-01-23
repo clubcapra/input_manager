@@ -6,6 +6,7 @@
 
 devices:
   - name: "Generic Controller" # Display name of the input device
+    udev_path: "/dev/input/capruh_bt" # Udev rule for the device (needs to be configured on the machine)
     id: "xxxx:xxxx" # USB Vendor ID and Product ID
     alias: "main_controller" # Alias used in topic names (/joy_input/alias & /input_watchdog/alias)
     enabled: true # Wether the device is currently being listened and published

@@ -1,6 +1,7 @@
 import threading
 import time
 import rclpy
+import os
 from rclpy.clock import Clock
 from evdev import InputDevice, list_devices
 from sensor_msgs.msg import Joy
@@ -33,12 +34,33 @@ class DeviceWorker(threading.Thread):
         self.axis_map = {int(v): int(k) for k, v in mapping.get('axes', {}).items()}
 
     def _find_device(self):
+        # 1. Attempt to use the udev path (Fastest & most reliable)
+        udev_path = self.config.get('udev_path')
+        if udev_path and os.path.exists(udev_path):
+            try:
+                dev = InputDevice(udev_path)
+                # Success!
+                return dev
+            except Exception as e:
+                self.node.get_logger().error(f"[{self.config['name']}] udev path {udev_path} found but inaccessible: {e}")
+
+        # 2. Fallback: Scan all devices for the Vendor:Product ID
+        # This ensures the robot still works even if the udev rule is missing
+        target_id = self.config.get('id')
         for path in list_devices():
             try:
                 dev = InputDevice(path)
-                if f"{dev.info.vendor:04x}:{dev.info.product:04x}" == self.config['id']:
-                    return dev
-            except: continue
+                hw_id = f"{dev.info.vendor:04x}:{dev.info.product:04x}"
+                
+                if hw_id == target_id:
+                    # IMPORTANT: Verify it's the main controller, not a keyboard clone
+                    # 3 is the code for EV_ABS (Joysticks)
+                    if 3 in dev.capabilities():
+                        self.node.get_logger().info(f"[{self.config['name']}] Found via ID scan on {path}")
+                        return dev
+            except Exception:
+                continue
+
         return None
 
     def process_event(self, event):
