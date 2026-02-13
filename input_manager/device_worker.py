@@ -99,11 +99,12 @@ class DeviceWorker(threading.Thread):
                 if self.device:
                     self.is_connected = True
                     previously_connected = True
-                    self.node.get_logger().info(f"[{self.config['name']}] Connected.")
+                    self.node.get_logger().info(f"[{self.config['name']}] Connected/Grabbed.")
                 else:
                     if previously_connected:
-                        self.node.get_logger().warn(f"[{self.config['name']}] Connection Lost.")
+                        self.node.get_logger().error(f"[{self.config['name']}] Connection Lost!")
                         previously_connected = False
+                        
                     self.is_connected = False
                     self.joy_msg.axes = [0.0] * 8
                     self.joy_msg.buttons = [0] * 16

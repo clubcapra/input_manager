@@ -3,6 +3,8 @@ from evdev import InputDevice, list_devices
 import select
 import sys
 
+# UTILITY FILE, not part of the package
+
 def main():
     # 1. Find all available input devices
     devices = [InputDevice(path) for path in list_devices()]
