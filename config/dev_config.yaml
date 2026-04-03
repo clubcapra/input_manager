@@ -164,8 +164,6 @@ devices:
         9:  17  # L_TPAD_Y
         10: 18  # R_TPAD_X
         11: 19  # R_TPAD_Y
-      # Confirm raw trigger range with evdev_code_tester on the Steam Deck,
-      # then uncomment and set the correct range:
-      # axis_ranges:
-      #   21: [0, 32767]  # LT
-      #   20: [0, 32767]  # RT
+      axis_ranges:
+        21: [0, 32767]  # LT
+        20: [0, 32767]  # RT
