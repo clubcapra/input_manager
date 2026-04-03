@@ -50,7 +50,6 @@ class DeviceWorker(threading.Thread):
             }
             for e in mapping.get('axes_as_buttons', [])
         ]
-        print("axis_ranges loaded:", self.axis_ranges)
 
     # ------------------------------------------------------------------
 
@@ -107,8 +106,10 @@ class DeviceWorker(threading.Thread):
                 if e['axis_code'] != event.code:
                     continue
                 t = e['threshold']
-                self.joy_msg.buttons[e['neg_button']] = 1 if val < -t else 0
-                self.joy_msg.buttons[e['pos_button']] = 1 if val >  t else 0
+                if e["neg_button"] >= 0:
+                    self.joy_msg.buttons[e["neg_button"]] = 1 if val < -t else 0
+                if e["pos_button"] >= 0:
+                    self.joy_msg.buttons[e["pos_button"]] = 1 if val >  t else 0
 
         elif event.type == 1:  # EV_KEY — buttons
             if event.code in self.btn_map:

@@ -22,7 +22,6 @@
 #                     space, evaluated AFTER range remapping and deadzone.
 
 devices:
-
   - name: "XBOX Controller \"CAPRUH\" (Bluetooth)"
     udev_path: "/dev/input/xbox_bl_controller_laptop"
     id: "045e:028e"
@@ -53,8 +52,6 @@ devices:
         5: 5  # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
-      # D-PAD is reported as two axes (codes 16, 17).
-      # Mirror them to button slots 12–15 so all controllers look identical.
       axes_as_buttons:
         - axis_code: 16   # D-PAD X
           neg_button: 14  # D-PAD LEFT
@@ -64,7 +61,6 @@ devices:
           neg_button: 12  # D-PAD UP   (axis negative = up on most controllers)
           pos_button: 13  # D-PAD DOWN
           threshold: 0.5
-      # No axis_ranges needed here — XBOX axes reach the full ±1 range.
 
   - name: "XBOX Controller \"CAPRUH\" (USB)"
     udev_path: "/dev/input/xbox_usb_controller_laptop"
@@ -160,10 +156,10 @@ devices:
         3: 308 # Y
         4: 310 # LB
         5: 311 # RB
-        6: 314 # Select
-        7: 315 # Start
-        8: 316 # Home
-        9: 294 # Special
+        6: 314 # Select (left button)
+        7: 315 # Start (right button)
+        8: 316 # Home (xbox/steam logo button)
+        9: 294 # Special (share button on xbox, triple dot button on steamdeck)
         10: 317 # LSB
         11: 318 # RSB
         12: 704 # LB4
@@ -189,10 +185,3 @@ devices:
         9: 17 # Left Trackpad Y-axis
         10: 18 # Right Trackpad X-axis
         11: 19 # Right Trackpad Y-axis
-      # Steam Deck D-PAD is hardware buttons (codes 544–547), so no axes_as_buttons needed.
-      #
-      # Example: if the Steam Deck triggers only reach ±0.85 of the normalized range,
-      # declare axis_ranges to stretch them back to ±1:
-      # axis_ranges:
-      #   21: [-0.85, 0.85]   # LT
-      #   20: [-0.85, 0.85]   # RT
