@@ -1,5 +1,25 @@
 # Default config, containing CAPRA's main XBOX controller (labelled )
 # YH 2025-01-08
+#
+# New fields (both optional per-device):
+#
+#   mapping.axis_ranges:
+#     Remaps a raw normalized axis value to [-1, 1].
+#     Key   = evdev axis code (same as used in mapping.axes values)
+#     Value = [raw_min, raw_max]  — the expected extremes AFTER the /32767
+#             normalization, i.e. in the same float unit you would see from
+#             the hardware.  The worker linearly stretches [raw_min, raw_max]
+#             to [-1.0, 1.0] and clamps anything outside.
+#     Leave absent to pass the axis value through unchanged.
+#
+#   mapping.axes_as_buttons:
+#     Mirrors one axis to two button slots (neg side + pos side).
+#     Fields:
+#       axis_code   – evdev EV_ABS code (same value used in mapping.axes)
+#       neg_button  – joy button index that fires when axis < -threshold
+#       pos_button  – joy button index that fires when axis >  threshold
+#       threshold   – (optional, default 0.5) activation level in [-1, 1]
+#                     space, evaluated AFTER range remapping and deadzone.
 
 devices:
 
@@ -25,14 +45,26 @@ devices:
         10: 317 # LSB (Left Stick Button)
         11: 318 # RSB (Right Stick Button)
       axes:
-        0: 0 # LSX (Left Stick X-axis)
-        1: 1 # LSY (Left Stick Y-axis)
-        2: 2 # LT
-        3: 3 # RSX (Right Stick X-axis)
-        4: 4 # RSY (Right Stick Y-axis)
-        5: 5 # RT
+        0: 0  # LSX (Left Stick X-axis)
+        1: 1  # LSY (Left Stick Y-axis)
+        2: 2  # LT
+        3: 3  # RSX (Right Stick X-axis)
+        4: 4  # RSY (Right Stick Y-axis)
+        5: 5  # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
+      # D-PAD is reported as two axes (codes 16, 17).
+      # Mirror them to button slots 12–15 so all controllers look identical.
+      axes_as_buttons:
+        - axis_code: 16   # D-PAD X
+          neg_button: 14  # D-PAD LEFT
+          pos_button: 15  # D-PAD RIGHT
+          threshold: 0.5
+        - axis_code: 17   # D-PAD Y
+          neg_button: 12  # D-PAD UP   (axis negative = up on most controllers)
+          pos_button: 13  # D-PAD DOWN
+          threshold: 0.5
+      # No axis_ranges needed here — XBOX axes reach the full ±1 range.
 
   - name: "XBOX Controller \"CAPRUH\" (USB)"
     udev_path: "/dev/input/xbox_usb_controller_laptop"
@@ -52,18 +84,27 @@ devices:
         6: 314 # Select
         7: 315 # Start
         8: 316 # Home
-        9: 88 # Special
+        9: 88  # Special
         10: 317 # LSB (Left Stick Button)
         11: 318 # RSB (Right Stick Button)
       axes:
-        0: 0 # LSX (Left Stick X-axis)
-        1: 1 # LSY (Left Stick Y-axis)
-        2: 2 # LT
-        3: 3 # RSX (Right Stick X-axis)
-        4: 4 # RSY (Right Stick Y-axis)
-        5: 5 # RT
+        0: 0  # LSX
+        1: 1  # LSY
+        2: 2  # LT
+        3: 3  # RSX
+        4: 4  # RSY
+        5: 5  # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
+      axes_as_buttons:
+        - axis_code: 16
+          neg_button: 14  # D-PAD LEFT
+          pos_button: 15  # D-PAD RIGHT
+          threshold: 0.5
+        - axis_code: 17
+          neg_button: 12  # D-PAD UP
+          pos_button: 13  # D-PAD DOWN
+          threshold: 0.5
 
   - name: "MSI Wireless Controller"
     udev_path: "/dev/input/msi_controller_laptop"
@@ -86,14 +127,23 @@ devices:
         10: 317 # LSB (Left Stick Button)
         11: 318 # RSB (Right Stick Button)
       axes:
-        0: 0 # LSX (Left Stick X-axis)
-        1: 1 # LSY (Left Stick Y-axis)
-        2: 2 # LT
-        3: 3 # RSX (Right Stick X-axis)
-        4: 4 # RSY (Right Stick Y-axis)
-        5: 5 # RT
+        0: 0  # LSX
+        1: 1  # LSY
+        2: 2  # LT
+        3: 3  # RSX
+        4: 4  # RSY
+        5: 5  # RT
         6: 16 # D-PAD X
         7: 17 # D-PAD Y
+      axes_as_buttons:
+        - axis_code: 16
+          neg_button: 14
+          pos_button: 15
+          threshold: 0.5
+        - axis_code: 17
+          neg_button: 12
+          pos_button: 13
+          threshold: 0.5
 
   - name: "Steam Deck"
     udev_path: "/dev/input/steamdeck"
@@ -128,15 +178,21 @@ devices:
         21: 290 # Right Trackpad Click
         22: 312 # Left Trigger-As-Button
         23: 313 # Right Trigger-As-Button
-        
       axes:
-        0: 0 # LSX
-        1: 1 # LSY
+        0: 0  # LSX
+        1: 1  # LSY
         2: 21 # LT
-        3: 3 # RSX
-        4: 4 # RSY
+        3: 3  # RSX
+        4: 4  # RSY
         5: 20 # RT
         8: 16 # Left Trackpad X-axis
         9: 17 # Left Trackpad Y-axis
         10: 18 # Right Trackpad X-axis
         11: 19 # Right Trackpad Y-axis
+      # Steam Deck D-PAD is hardware buttons (codes 544–547), so no axes_as_buttons needed.
+      #
+      # Example: if the Steam Deck triggers only reach ±0.85 of the normalized range,
+      # declare axis_ranges to stretch them back to ±1:
+      # axis_ranges:
+      #   21: [-0.85, 0.85]   # LT
+      #   20: [-0.85, 0.85]   # RT

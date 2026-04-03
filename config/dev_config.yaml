@@ -1,0 +1,68 @@
+# Input Manager Config
+# YH 2025-01-08
+#
+# --- axis_ranges ---
+# By default, axes are normalized by dividing the raw evdev integer by 32767
+# (sticks send -32768…32767). For axes that send a different range, declare:
+#
+#   axis_ranges:
+#     <evdev_code>: [raw_min, raw_max]
+#
+# The worker will linearly map [raw_min, raw_max] → [-1.0, 1.0] instead.
+# D-PAD axes (ABS_HAT0X/Y, codes 16/17) send -1 / 0 / 1, so declare [-1, 1].
+#
+# --- axes_as_buttons ---
+# Mirrors an axis to two button slots (one for each direction).
+# Threshold is in the final [-1, 1] space, after normalization and deadzone.
+#
+#   axes_as_buttons:
+#     - axis_code: <evdev_code>   # axis to watch
+#       neg_button: <joy_index>   # buttons[] slot fired when val < -threshold
+#       pos_button: <joy_index>   # buttons[] slot fired when val > +threshold
+#       threshold: 0.5            # optional, default 0.5
+
+devices:
+  - name: "XBOX Controller (Bluetooth)"
+    udev_path: "/dev/input/xbox_bl_controller_laptop"
+    id: "045e:028e"
+    alias: "xbox_bl_controller_laptop"
+    enabled: true
+    sanitize: false
+    deadzone: 0
+    mapping:
+      buttons:
+        0: 304  # A
+        1: 305  # B
+        2: 307  # X
+        3: 308  # Y
+        4: 310  # LB
+        5: 311  # RB
+        6: 314  # Select
+        7: 315  # Start
+        8: 316  # Home
+        9: 167  # Special
+        10: 317 # LSB
+        11: 318 # RSB
+      axes:
+        0: 0   # LSX  (ABS_X)
+        1: 1   # LSY  (ABS_Y)
+        2: 2   # LT   (ABS_Z)
+        3: 3   # RSX  (ABS_RX)
+        4: 4   # RSY  (ABS_RY)
+        5: 5   # RT   (ABS_RZ)
+        6: 16  # D-PAD X  (ABS_HAT0X) — kept as axis too
+        7: 17  # D-PAD Y  (ABS_HAT0Y) — kept as axis too
+      axis_ranges:
+        2: [0, 1023]   # LT  (ABS_Z)
+        5: [0, 1023]   # RT  (ABS_RZ)
+        16: [-1, 1]    # D-PAD X
+        17: [-1, 1]    # D-PAD Y
+      axes_as_buttons:
+        - axis_code: 16   # ABS_HAT0X
+          neg_button: 18  # D-PAD LEFT
+          pos_button: 19  # D-PAD RIGHT
+          threshold: 0.5
+        - axis_code: 17   # ABS_HAT0Y
+          neg_button: 16  # D-PAD UP   (negative = up)
+          pos_button: 17  # D-PAD DOWN
+          threshold: 0.5
