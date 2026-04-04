@@ -1,5 +1,5 @@
 from rclpy.node import Node
-from device_worker import DeviceWorker
+from input_manager.device_worker import DeviceWorker
 
 class InputManagerNode(Node):
     def __init__(self):
