@@ -4,8 +4,8 @@ import json
 import os
 import argparse
 import time
-from manager_node import InputManagerNode
-from app_ui import InputManagerUI
+from input_manager.manager_node import InputManagerNode
+from input_manager.app_ui import InputManagerUI
 
 SETTINGS_FILE = os.path.expanduser("~/.ros2_input_manager_settings.json")
 
@@ -60,8 +60,8 @@ def main():
     parser = argparse.ArgumentParser(description="Rescue Robot Input Manager")
     parser.add_argument('--no-gui', '-n', action='store_true', help="Run without the Tkinter interface")
     parser.add_argument('--config', '-c', type=str, help="Path to a specific YAML config")
-    args = parser.parse_args()
-
+    args, _ = parser.parse_known_args()
+    
     rclpy.init()
     node = InputManagerNode()
     
