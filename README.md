@@ -77,7 +77,7 @@ Prints a live one-line status to the console. Ctrl+C to exit.
 ros2 launch input_manager input_manager.launch.py config:=/path/to/your_config.yaml
 
 # Or directly
-ros2 run input_manager input_manager --config /path/to/your_config.yaml --no-gui
+ros2 run input_manager input_manager --ros-args -p config:=/path/to/your_config.yaml -p no_gui:=true
 ```
 
 The default config is the one installed with the package at `share/input_manager/config/default_config.yaml`. During development it's easier to point directly at your working copy with `--config`.
