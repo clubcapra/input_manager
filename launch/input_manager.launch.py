@@ -26,10 +26,9 @@ def generate_launch_description():
             executable='input_manager',
             name='input_manager',
             output='screen',
-            arguments=[
-                '--config', LaunchConfiguration('config'),
-                # Conditionally pass --no-gui based on the argument
-                # (see note below if you need this to be dynamic)
-            ],
+            parameters=[{
+                'config': LaunchConfiguration('config'),
+                'no_gui': LaunchConfiguration('no_gui'),
+            }],
         ),
     ])
