@@ -1,9 +1,16 @@
 from rclpy.node import Node
+from rclpy.parameter import Parameter
 from input_manager.device_worker import DeviceWorker
 
 class InputManagerNode(Node):
     def __init__(self):
         super().__init__('input_manager_node')
+
+        # Declare parameters so they can be set via:
+        #   --ros-args -p config:=/path/to/cfg.yaml -p no_gui:=true
+        self.declare_parameter('config', '')      # empty string = use persistence/default
+        self.declare_parameter('no_gui', False)
+
         self.workers = {}
 
     def start_devices(self, config_data):

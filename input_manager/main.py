@@ -2,7 +2,6 @@ import rclpy
 import threading
 import json
 import os
-import argparse
 import time
 from input_manager.manager_node import InputManagerNode
 from input_manager.app_ui import InputManagerUI
@@ -42,36 +41,34 @@ def run_headless(node, config_path):
     
     try:
         while rclpy.ok():
-            # Create a status summary line
             status_reports = []
             for name, worker in node.workers.items():
                 state = "OK" if worker.is_connected else "LOST"
                 status_reports.append(f"{name}: [{state}]")
             
-            # Print status over the same line to avoid scrolling spam
             if status_reports:
                 print(f"\rStatus: {' | '.join(status_reports)}", end="", flush=True)
             
-            time.sleep(1.0) # Update console every second
+            time.sleep(1.0)
     except KeyboardInterrupt:
         pass
 
 def main():
-    parser = argparse.ArgumentParser(description="Rescue Robot Input Manager")
-    parser.add_argument('--no-gui', '-n', action='store_true', help="Run without the Tkinter interface")
-    parser.add_argument('--config', '-c', type=str, help="Path to a specific YAML config")
-    args, _ = parser.parse_known_args()
-    
     rclpy.init()
     node = InputManagerNode()
-    
-    # Priority: Command line arg -> Persistence -> Default
-    initial_path = args.config if args.config else get_last_config_path()
+
+    # Read ROS parameters declared in the node.
+    # Override with: --ros-args -p config:=/path/to/cfg.yaml -p no_gui:=true
+    no_gui = node.get_parameter('no_gui').get_parameter_value().bool_value
+    config_param = node.get_parameter('config').get_parameter_value().string_value
+
+    # Priority: ROS param -> Persistence -> Default
+    initial_path = config_param if config_param else get_last_config_path()
 
     ros_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     ros_thread.start()
 
-    if args.no_gui:
+    if no_gui:
         run_headless(node, initial_path)
     else:
         node.get_logger().info("Input Manager Service Started (GUI Mode).")
