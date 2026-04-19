@@ -68,7 +68,7 @@ devices:
     alias: "xbox_usb_controller_laptop"
     enabled: true
     sanitize: false
-    deadzone: 0
+    deadzone: 0.1
     mapping:
       buttons:
         0: 304 # A
