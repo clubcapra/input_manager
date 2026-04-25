@@ -70,7 +70,7 @@ devices:
     udev_path: "/dev/input/xbox_usb_controller_laptop"
     id: "045e:0b12"
     alias: "xbox_usb_controller_laptop"
-    enabled: false
+    enabled: true
     sanitize: true
     deadzone: 0.05
     mapping:
